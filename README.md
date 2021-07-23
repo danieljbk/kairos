@@ -10,11 +10,15 @@ Kairos is a script that periodically sends weather information through email or 
 - Type 'python ' into the Terminal (don't forget the space)
 - Drag the main.py file into the Terminal (this will paste the filepath into the Terminal)
 - Press Enter in the Terminal
-- Kairos should run (or you may have to install some modules)
+- Kairos will run
 - In the Terminal, schedule when the emails should send
 - (To send emails immediately for testing, uncomment the send() line in the run() function in main.py)
 
 ## Prerequisites:
+Additional modules required:
+- pyowm
+- schedule
+
 Before using Kairos, you must complete these two steps:
 - Create OpenWeatherMap API Key - https://OpenWeatherMap.com/API 
 - Create Google App Password - https://myaccount.google.com/security
