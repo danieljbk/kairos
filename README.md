@@ -1,16 +1,24 @@
 # Kairos the Weather Bot
 Automated Weather Information Emailing System
 
-## Before using Kairos, you must create:
+## Prerequisites:
+Before using Kairos, you must create:
 - OpenWeatherMap API Key - https://OpenWeatherMap.com/API 
 - Google App Password - https://myaccount.google.com/security
     - Turn on 2-Step Verification
     - Create 'App Password'
 
+Then, you must store this information in:
+- assets/private/secret.txt
+ 
 ## Reading Subscriber Data:
-To use Kairos, you must create text files containing your subscriber data called email.txt and sms.txt.
+To use Kairos, you must create:
+- Text file containing your subscriber data called email.txt
+- Text file containing your subscriber data called sms.txt
 
-The location of the files must be in assets/subscribers/*.txt.
+Then, you must store this information in:
+- assets/subscribers/email.txt
+- assets/subscribers/sms.txt
 
 The subscriber data used by Kairos is:
 - Email
