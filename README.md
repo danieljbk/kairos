@@ -1,5 +1,7 @@
 # Kairos the Weather Bot
-Automated Weather Information Emailing System
+An Automated Weather Information Emailing System...
+Kairos is a script that periodically sends weather information through email or text.
+
 
 ## Prerequisites:
 Before using Kairos, you must create:
