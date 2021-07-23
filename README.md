@@ -12,6 +12,14 @@ Then, you must store this information in:
 - assets/private/secret.txt
  
 ## Reading Subscriber Data:
+The subscriber data used by Kairos is:
+- Email
+- Name
+- Location
+
+###### Note: These three things must be separated by ' & '.
+###### Example: email@address.com & First Name & Location
+
 To use Kairos, you must create:
 - Text file containing your subscriber data called email.txt
 - Text file containing your subscriber data called sms.txt
@@ -26,14 +34,6 @@ In the text files, there must be a line with the text:
 Underneath this text, you can store the data of subscribers who have unsubscribed (or, you could delete the information).
 
 Currently, any edits to these files must be made manually.
-
-The subscriber data used by Kairos is:
-- Email
-- Name
-- Location
-
-###### Note: These three things must be separated by ' & '.
-###### Example: email@address.com & First Name & Location
 
 ## Guide for Location:
 The location must be compatible with OpenWeatherMap's search engine - https://openweathermap.org/.
