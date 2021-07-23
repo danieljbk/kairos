@@ -63,7 +63,7 @@ def script(name, location, type, OPENWEATHERMAP_API_KEY):
 
 def gather_personal_data(): # from relative path assets/private
     OPENWEATHERMAP_API_KEY = open("assets/personal/openweathermap_api_key.txt", "r").readline().strip()
-    GMAIL_USERNAME = open("assets/personal/gmail_app_password.txt", "r").readline().strip()
+    GMAIL_USERNAME = open("assets/personal/gmail_username.txt", "r").readline().strip()
     GMAIL_API_KEY = open("assets/personal/gmail_app_password.txt", "r").readline().strip()
     
     return OPENWEATHERMAP_API_KEY, GMAIL_USERNAME, GMAIL_API_KEY
