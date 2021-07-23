@@ -1,1 +1,5 @@
 username@gmail.com
+^^^^
+Type your gmail address here.
+
+Note: For now, Kairos only supports sending emails from Gmail accounts.
