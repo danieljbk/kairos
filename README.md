@@ -9,10 +9,21 @@ Before using Kairos, you must create:
     - Turn on 2-Step Verification
     - Create 'App Password'
 
-Then, you must store this information in:
-- assets/private/OPENWEATHERMAP_API_KEY.txt
-- assets/private/GMAIL_APP_PASSWORD.txt
+When these prerequisites are fulfilled, you should download Kairos.
+
+Then, you must type this information in:
+- assets/private/openweathermap_api_key.txt
+- assets/private/gmail_app_password.txt
+
+You must also type your email address in:
+- assets/private/gmail_username.txt
  
+That's it!
+
+You should now be able to run Kairos in your terminal.
+
+If there is an error, please create an issue. Thanks!
+
 ## Reading Subscriber Data:
 The subscriber data used by Kairos is:
 - Email
