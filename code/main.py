@@ -6,10 +6,10 @@ from email.message import EmailMessage
 from datetime import datetime
 
 
-def weather(location): # collect weather info and generate script to send in email
+def weather(location, OPENWEATHERMAP_API_KEY): # collect weather info and generate script to send in email
     city, country = location.split(", ")
 
-    owm = pyowm.OWM(OPENWEATHERMAP_API_KEY) # github secret
+    owm = pyowm.OWM(OPENWEATHERMAP_API_KEY) # secret
     mgr = owm.weather_manager()
     observation = mgr.weather_at_place(location)
     w = observation.weather
@@ -30,8 +30,8 @@ def weather(location): # collect weather info and generate script to send in ema
     return city, country, detailed_status, w.clouds, w.humidity, temp, max_temp, min_temp, feels_like
 
 
-def script(name, location, type):
-    city, country, status, clouds, humidity, temp, max_temp, min_temp, feels_like = weather(location)
+def script(name, location, type, OPENWEATHERMAP_API_KEY):
+    city, country, status, clouds, humidity, temp, max_temp, min_temp, feels_like = weather(location, OPENWEATHERMAP_API_KEY)
     
     if type == "email":
         script = ''
@@ -61,9 +61,16 @@ def script(name, location, type):
     return script
 
 
-def gather_data(subscription_type):
-    path = "/Users/danielkwon/Library/Mobile Documents/com~apple~CloudDocs/Daniel's Files/Coding/VSCode/Python/Kairos/assets/subscribers/"
-    path += subscription_type
+def gather_sensitive_data(): # from relative path assets/private
+    OPENWEATHERMAP_API_KEY = open("assets/private/openweathermap_api_key.txt", "r").readline().strip()
+    GMAIL_API_KEY = open("assets/private/gmail_app_password.txt", "r").readline().strip()
+    
+    return OPENWEATHERMAP_API_KEY, GMAIL_API_KEY
+
+
+def gather_subscriber_data(subscription_type):
+    path = "assets/subscribers"
+    path += "/" + subscription_type
 
     f = open(path, "r")
     subscribers = f.read().split("\n")
@@ -79,19 +86,19 @@ def gather_data(subscription_type):
 
 
 def subscribers(): # list of addresses to send the email to
-    email_subscribers = gather_data("email")
-    sms_subscribers = gather_data("sms")
+    email_subscribers = gather_subscriber_data("email.txt")
+    sms_subscribers = gather_subscriber_data("sms.txt")
     
     return email_subscribers, sms_subscribers
 
 
-def email_alert (to, subject, body): # most important: for sending the email
+def email_alert (to, subject, body, GMAIL_API_KEY): # most important: for sending the email
     msg = EmailMessage()
     msg.set_content(body)
     msg['subject'] = subject
     msg['to'] = to
 
-    user, password = "kairosweather@gmail.com", KAIROSWEATHER_GMAIL_API_KEY # github secret
+    user, password = "kairosweather@gmail.com", GMAIL_API_KEY # secret
     msg['from'] = user
     
     server = smtplib.SMTP("smtp.gmail.com", 587)
@@ -113,24 +120,43 @@ def today(): # collect today's date
 def send(): # send the email
     print(f"\nSending: {today()}\n")
 
+    OPENWEATHERMAP_API_KEY, GMAIL_API_KEY = gather_sensitive_data()
     email_subscribers, sms_subscribers = subscribers()
     for data in email_subscribers:
-        email_alert(data[0], f"What's the Weather Right Now? ({today()})", script(data[1], data[2], "email"))
+        email_alert(data[0], f"What's the Weather Right Now? ({today()})", script(data[1], data[2], "email", OPENWEATHERMAP_API_KEY), GMAIL_API_KEY)
         print("    " + "- sent to:", data[0], "in", data[2])
     for data in sms_subscribers:
-        email_alert(data[0], f"Weather Update ({today()})", script(data[1], data[2], "sms"))
+        email_alert(data[0], f"Weather Update ({today()})", script(data[1], data[2], "sms", OPENWEATHERMAP_API_KEY), GMAIL_API_KEY)
         print("    " + "- sent to:", data[0].split("@")[0], "in", data[2])
 
     print(f"\nSuccess: {today()}\n")
 
 
 def run(): # schedule the email to send every day at a specific time
-    print("\nKairos initiated...\n")
-    schedule.every().day.at("09:00").do(send)
+    print("When should the email be sent out? (9PM would be 21:00, and 1AM would be 01:00)")
+    hour = int(input("    Hour: "))
+    minute = int(input("    Minute: "))
+    print()
+    
+    am_pm = 'AM'
+    if hour >= 12:
+        am_pm = 'PM'
+    
+    designated_time = f"{hour}:{minute}"
+    if hour < 10:
+        hour = f"0{hour}"
+    if minute < 10:
+        minute = f"0{minute}"
+    designated_time = f"{hour}:{minute}"
+    
+    print()
+    print(f"Kairos scheduled to send at {int(hour)}:{minute}{am_pm}...")
+    print()
+    schedule.every().day.at(designated_time).do(send)
     while True:
         print("    " + "- checking in:", datetime.now().time())
         schedule.run_pending()
-        # send() # uncomment to send immediately for testing purposes
+        send() # uncomment to send immediately for testing purposes
         time.sleep(1500)
 
 
