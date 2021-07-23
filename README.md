@@ -12,11 +12,11 @@ Before using Kairos, you must create:
 When these prerequisites are fulfilled, you should download Kairos.
 
 Then, you must type this information in:
-- assets/private/openweathermap_api_key.txt
-- assets/private/gmail_app_password.txt
+- assets/personal/openweathermap_api_key.txt
+- assets/personal/gmail_app_password.txt
 
 You must also type your email address in:
-- assets/private/gmail_username.txt
+- assets/personal/gmail_username.txt
  
 That's it! You should now be able to run Kairos in your terminal.
 
