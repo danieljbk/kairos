@@ -133,9 +133,19 @@ def send(): # send the email
 
 def run(): # schedule the email to send every day at a specific time
     print("When should the email be sent out? (9PM would be 21:00, and 1AM would be 01:00)")
-    hour = int(input("    Hour: "))
-    minute = int(input("    Minute: "))
+    hour = input("    Hour: ")
+    minute = input("    Minute: ")
     print()
+    
+    if hour:
+        hour = int(hour)
+    else: 
+        hour = 0
+    
+    if minute:
+        minute = int(hominuteur)
+    else: 
+        minute = 0
     
     am_pm = 'AM'
     if hour >= 12:
