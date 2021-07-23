@@ -19,10 +19,8 @@ The subscriber data used in Kairos is:
 2. Name
 3. Location
 
-###### Note: ' & '
-These three things must be separated by ' & '.
-
-example: email@address.com & First Name & Location
+###### Note: These three things must be separated by ' & '.
+###### example: email@address.com & First Name & Location
 
 ## Location
 Guide for Location:
@@ -37,5 +35,4 @@ Good Examples:
 Bad Example:
 1. Middletown, US # since there are multiple cities in the US called Middletown, the location fetched may not be the Middletown you want.
 
-###### Note: 
-Kairos uses 'US' to perform United States-specific actions like using Farenheit.
+###### Note: Kairos uses 'US' to perform United States-specific actions like using Farenheit.
