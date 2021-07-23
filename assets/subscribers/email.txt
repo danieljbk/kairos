@@ -1,5 +1,0 @@
-sample@email.com & Name & Dallas, US
-
-
-UNSUBSCRIBED:
-sample2@email.com & Name & New York, US
