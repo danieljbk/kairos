@@ -61,11 +61,12 @@ def script(name, location, type, OPENWEATHERMAP_API_KEY):
     return script
 
 
-def gather_sensitive_data(): # from relative path assets/private
-    OPENWEATHERMAP_API_KEY = open("assets/private/openweathermap_api_key.txt", "r").readline().strip()
-    GMAIL_API_KEY = open("assets/private/gmail_app_password.txt", "r").readline().strip()
+def gather_personal_data(): # from relative path assets/private
+    OPENWEATHERMAP_API_KEY = open("assets/personal/openweathermap_api_key.txt", "r").readline().strip()
+    GMAIL_USERNAME = open("assets/personal/gmail_username.txt", "r").readline().strip()
+    GMAIL_API_KEY = open("assets/personal/gmail_app_password.txt", "r").readline().strip()
     
-    return OPENWEATHERMAP_API_KEY, GMAIL_API_KEY
+    return OPENWEATHERMAP_API_KEY, GMAIL_USERNAME, GMAIL_API_KEY
 
 
 def gather_subscriber_data(subscription_type):
@@ -92,18 +93,16 @@ def subscribers(): # list of addresses to send the email to
     return email_subscribers, sms_subscribers
 
 
-def email_alert (to, subject, body, GMAIL_API_KEY): # most important: for sending the email
+def email_alert (to, subject, body, GMAIL_USERNAME, GMAIL_API_KEY): # most important: for sending the email
     msg = EmailMessage()
     msg.set_content(body)
     msg['subject'] = subject
     msg['to'] = to
-
-    user, password = "kairosweather@gmail.com", GMAIL_API_KEY # secret
-    msg['from'] = user
+    msg['from'] = GMAIL_USERNAME
     
     server = smtplib.SMTP("smtp.gmail.com", 587)
     server.starttls()
-    server.login(user, password)
+    server.login(GMAIL_USERNAME, GMAIL_API_KEY)
     server.send_message(msg)
     server.quit()
 
@@ -120,13 +119,13 @@ def today(): # collect today's date
 def send(): # send the email
     print(f"\nSending: {today()}\n")
 
-    OPENWEATHERMAP_API_KEY, GMAIL_API_KEY = gather_sensitive_data()
+    OPENWEATHERMAP_API_KEY, GMAIL_USERNAME, GMAIL_API_KEY = gather_personal_data()
     email_subscribers, sms_subscribers = subscribers()
     for data in email_subscribers:
-        email_alert(data[0], f"What's the Weather Right Now? ({today()})", script(data[1], data[2], "email", OPENWEATHERMAP_API_KEY), GMAIL_API_KEY)
+        email_alert(data[0], f"What's the Weather Right Now? ({today()})", script(data[1], data[2], "email", OPENWEATHERMAP_API_KEY), GMAIL_USERNAME, GMAIL_API_KEY)
         print("    " + "- sent to:", data[0], "in", data[2])
     for data in sms_subscribers:
-        email_alert(data[0], f"Weather Update ({today()})", script(data[1], data[2], "sms", OPENWEATHERMAP_API_KEY), GMAIL_API_KEY)
+        email_alert(data[0], f"Weather Update ({today()})", script(data[1], data[2], "sms", OPENWEATHERMAP_API_KEY), GMAIL_USERNAME, GMAIL_API_KEY)
         print("    " + "- sent to:", data[0].split("@")[0], "in", data[2])
 
     print(f"\nSuccess: {today()}\n")
@@ -134,9 +133,19 @@ def send(): # send the email
 
 def run(): # schedule the email to send every day at a specific time
     print("When should the email be sent out? (9PM would be 21:00, and 1AM would be 01:00)")
-    hour = int(input("    Hour: "))
-    minute = int(input("    Minute: "))
+    hour = input("    Hour: ")
+    minute = input("    Minute: ")
     print()
+    
+    if hour:
+        hour = int(hour)
+    else: 
+        hour = 0
+    
+    if minute:
+        minute = int(minute)
+    else: 
+        minute = 0
     
     am_pm = 'AM'
     if hour >= 12:
