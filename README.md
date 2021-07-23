@@ -2,7 +2,7 @@
 Automated Weather Information Emailing System
 
 ## Before using Kairos, you must create:
-- OpenWeatherMap API Key - OpenWeatherMap.com/API 
+- OpenWeatherMap API Key - https://OpenWeatherMap.com/API 
 - Google App Password - https://myaccount.google.com/security
     - Turn on 2-Step Verification
     - Create 'App Password'
