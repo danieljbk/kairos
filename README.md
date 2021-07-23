@@ -2,10 +2,10 @@
 Automated Weather Information Emailing System
 
 ## Before using Kairos, you must create:
-1. OpenWeatherMap API Key - OpenWeatherMap.com/API
-2. Google App Password - https://myaccount.google.com/security
-    a. Turn on 2-Step Verification
-    b. Create 'App Password'
+- OpenWeatherMap API Key - OpenWeatherMap.com/API
+- Google App Password - https://myaccount.google.com/security
+    - Turn on 2-Step Verification
+    - Create 'App Password'
 
 ## Reading Subscriber Data:
 To use Kairos, you must create text files containing your subscriber data called email.txt and sms.txt.
@@ -13,9 +13,9 @@ To use Kairos, you must create text files containing your subscriber data called
 The location of the files must be in assets/subscribers/*.txt.
 
 The subscriber data used by Kairos is:
-1. Email
-2. Name
-3. Location
+- Email
+- Name
+- Location
 
 ###### Note: These three things must be separated by ' & '.
 ###### example: email@address.com & First Name & Location
