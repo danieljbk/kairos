@@ -156,7 +156,7 @@ def run(): # schedule the email to send every day at a specific time
     while True:
         print("    " + "- checking in:", datetime.now().time())
         schedule.run_pending()
-        send() # uncomment to send immediately for testing purposes
+#         send() # uncomment to send immediately for testing purposes
         time.sleep(1500)
 
 
