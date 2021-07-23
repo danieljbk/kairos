@@ -9,7 +9,7 @@ from datetime import datetime
 def weather(location, OPENWEATHERMAP_API_KEY): # collect weather info and generate script to send in email
     city, country = location.split(", ")
 
-    owm = pyowm.OWM(OPENWEATHERMAP_API_KEY) # secret
+    owm = pyowm.OWM(OPENWEATHERMAP_API_KEY)
     mgr = owm.weather_manager()
     observation = mgr.weather_at_place(location)
     w = observation.weather
@@ -99,7 +99,6 @@ def email_alert (to, subject, body, GMAIL_USERNAME, GMAIL_API_KEY): # most impor
     msg['subject'] = subject
     msg['to'] = to
     msg['from'] = GMAIL_USERNAME
-    
     server = smtplib.SMTP("smtp.gmail.com", 587)
     server.starttls()
     server.login(GMAIL_USERNAME, GMAIL_API_KEY)
@@ -121,9 +120,11 @@ def send(): # send the email
 
     OPENWEATHERMAP_API_KEY, GMAIL_USERNAME, GMAIL_API_KEY = gather_personal_data()
     email_subscribers, sms_subscribers = subscribers()
+    
     for data in email_subscribers:
         email_alert(data[0], f"What's the Weather Right Now? ({today()})", script(data[1], data[2], "email", OPENWEATHERMAP_API_KEY), GMAIL_USERNAME, GMAIL_API_KEY)
         print("    " + "- sent to:", data[0], "in", data[2])
+    
     for data in sms_subscribers:
         email_alert(data[0], f"Weather Update ({today()})", script(data[1], data[2], "sms", OPENWEATHERMAP_API_KEY), GMAIL_USERNAME, GMAIL_API_KEY)
         print("    " + "- sent to:", data[0].split("@")[0], "in", data[2])
@@ -165,7 +166,7 @@ def run(): # schedule the email to send every day at a specific time
     while True:
         print("    " + "- checking in:", datetime.now().time())
         schedule.run_pending()
-#         send() # uncomment to send immediately for testing purposes
+#         send() # uncomment to send immediately (for testing)
         time.sleep(1500)
 
 
