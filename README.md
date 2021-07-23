@@ -27,7 +27,7 @@ Test that:
 - Your location works.
 - The location fetched is the actual location you want.
 
-###### Good Example 1: Seongnam-si, Korea
-###### Good Example 2: Dallas, US # Kairos uses 'US' to perform United States-specific actions like using Farenheit.
-###### Bad Example: Middletown, US # since there are multiple cities in the US with that name, the location fetched may not be correct.
+###### Good Example: Seongnam-si, Korea  # This location requires a dash('-').
+###### Good Example: Dallas, US  # Kairos uses 'US' to perform United States-specific actions like using Farenheit.
+###### Bad Example: Middletown, US  # since there are multiple cities in the US with that name, the location fetched may not be correct.
 
