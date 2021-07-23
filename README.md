@@ -2,7 +2,7 @@
 Automated Weather Information Emailing System
 
 ## Before using Kairos, you must create:
-- OpenWeatherMap API Key - OpenWeatherMap.com/API
+- OpenWeatherMap API Key - OpenWeatherMap.com/API 
 - Google App Password - https://myaccount.google.com/security
     - Turn on 2-Step Verification
     - Create 'App Password'
@@ -18,7 +18,7 @@ The subscriber data used by Kairos is:
 - Location
 
 ###### Note: These three things must be separated by ' & '.
-###### example: email@address.com & First Name & Location
+###### Example: email@address.com & First Name & Location
 
 ## Guide for Location:
 The location must be compatible with OpenWeatherMap's search engine - https://openweathermap.org/.
