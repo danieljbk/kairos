@@ -143,7 +143,7 @@ def run(): # schedule the email to send every day at a specific time
         hour = 0
     
     if minute:
-        minute = int(hominuteur)
+        minute = int(minute)
     else: 
         minute = 0
     
