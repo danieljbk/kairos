@@ -1,1 +1,6 @@
-youknowhowitgoesu892u4108u0
+ua76aljrbhh866dk08aff8g66a4dfg8g
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Type your OpenWeatherMap API key here.
+
+Note: It may take a few hours before OpenWeatherMap accepts your key.
+If you don't want to wait, you can temporarily use my personal API key: 45be4a3167e75b6bc8b477774e7a78f3
