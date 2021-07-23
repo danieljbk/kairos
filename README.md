@@ -7,8 +7,8 @@ Kairos is a script that periodically sends weather information through email or 
 - Complete prerequisites (described below)
 - Complete subscriber data setup
 - Open Terminal
-- Type 'python ' (don't forget the space)
-- Drag the main.py file into the Terminal
+- Type 'python ' into the Terminal (don't forget the space)
+- Drag the main.py file into the Terminal (this will paste the filepath into the Terminal)
 - Press Enter in the Terminal
 - Kairos should run (or you may have to install some modules)
 - In the Terminal, schedule when the emails should send
