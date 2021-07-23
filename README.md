@@ -18,11 +18,9 @@ Then, you must type this information in:
 You must also type your email address in:
 - assets/private/gmail_username.txt
  
-That's it!
+That's it! You should now be able to run Kairos in your terminal.
 
-You should now be able to run Kairos in your terminal.
-
-If there is an error, please create an issue. Thanks!
+If an error occurs, please notify me by creating an issue. Thank you!
 
 ## Reading Subscriber Data:
 The subscriber data used by Kairos is:
