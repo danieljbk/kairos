@@ -21,7 +21,8 @@ Then, you must store this information in:
 - assets/subscribers/sms.txt
 
 In the text files, there must be a line with the text:
-- 'UNSUBSCRIBED:'
+- UNSUBSCRIBED:
+
 Underneath this text, you can store the data of subscribers who have unsubscribed (or, you could delete the information).
 
 Currently, any edits to these files must be made manually.
