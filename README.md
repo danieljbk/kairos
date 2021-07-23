@@ -20,6 +20,11 @@ Then, you must store this information in:
 - assets/subscribers/email.txt
 - assets/subscribers/sms.txt
 
+In the text files, there must be a line with the text 'UNSUBSCRIBED:'.
+Underneath this text, you can store the data of subscribers who have unsubscribed (or, you could delete the information).
+
+Currently, any edits to these files must be made manually.
+
 The subscriber data used by Kairos is:
 - Email
 - Name
