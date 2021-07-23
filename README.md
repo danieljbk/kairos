@@ -3,7 +3,7 @@ Kairos is a script that periodically sends weather information through email or 
 ###### Note: It should be run on an interface that can accept inputs (for scheduling the email).
 
 ## Prerequisites:
-Before using Kairos, you must do these two things:
+Before using Kairos, you must complete these two steps:
 - Create OpenWeatherMap API Key - https://OpenWeatherMap.com/API 
 - Create Google App Password - https://myaccount.google.com/security
     - Turn on 2-Step Verification
