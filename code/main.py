@@ -5,13 +5,6 @@ import time
 from email.message import EmailMessage
 from datetime import datetime
 
-'''
-    "Kairos" is a script that periodically sends weather information through email or text.
-
-    Bugs to Fix:
-        https://stackoverflow.com/questions/15514593/importerror-no-module-named-when-trying-to-run-python-script
-        https://stackoverflow.com/questions/61762045/running-google-colab-every-day-at-a-specific-time
-'''
 
 def weather(location): # collect weather info and generate script to send in email
     city, country = location.split(", ")
