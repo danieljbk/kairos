@@ -11,7 +11,8 @@ Before using Kairos, you must create:
     - Create 'App Password'
 
 Then, you must store this information in:
-- assets/private/secret.txt
+- assets/private/OPENWEATHERMAP_API_KEY.txt
+- assets/private/GMAIL_APP_PASSWORD.txt
  
 ## Reading Subscriber Data:
 The subscriber data used by Kairos is:
