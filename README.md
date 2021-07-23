@@ -23,9 +23,11 @@ The subscriber data used by Kairos is:
 ## Guide for Location:
 The location must be compatible with OpenWeatherMap's search engine - https://openweathermap.org/.
 
-Test that your location works, and that the location fetched is the actual location you want.
+Test that:
+- Your location works.
+- The location fetched is the actual location you want.
 
-###### Good Examples: Dallas, US or Seongnam-si, Korea
-###### Bad Example: Middletown, US # since there are multiple cities in the US called Middletown, the location fetched will likely not be the Middletown you want.
+###### Good Example 1: Seongnam-si, Korea
+###### Good Example 2: Dallas, US # Kairos uses 'US' to perform United States-specific actions like using Farenheit.
+###### Bad Example: Middletown, US # since there are multiple cities in the US with that name, the location fetched may not be correct.
 
-###### Note: Kairos uses 'US' to perform United States-specific actions like using Farenheit.
