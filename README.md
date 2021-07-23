@@ -1,6 +1,6 @@
 # Kairos the Weather Bot
 Kairos is a script that periodically sends weather information through email or text.
-
+###### Note: It should be run on an interface that can accept inputs (for scheduling the email).
 
 ## Prerequisites:
 Before using Kairos, you must create:
