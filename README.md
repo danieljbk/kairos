@@ -1,4 +1,4 @@
-<img src="https://user-images.githubusercontent.com/79312811/126855101-e5f8f078-1154-46b3-bc7b-ad2066735e64.png" width="400" height="400">
+<img src="https://user-images.githubusercontent.com/79312811/126855101-e5f8f078-1154-46b3-bc7b-ad2066735e64.png" width="200" height="200">
 
 # Kairos the Weather Bot
 Kairos is a script that periodically sends weather information through email or text.
