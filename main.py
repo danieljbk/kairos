@@ -3,7 +3,7 @@ import time
 import smtplib
 from datetime import datetime
 from email.message import EmailMessage
-from auto_import import auto_import  # for external modules
+from auto_import import auto_import  # see auto_import.py for details
 exec(auto_import("pyowm"))
 exec(auto_import("schedule"))
 
@@ -186,7 +186,7 @@ def run():  # schedule the email to send every day at a specific time
     while True:
         print("    " + "- checking in:", datetime.now().time())
         schedule.run_pending()
-        send()  # uncommented for debugging: send email immediately
+#         send()  # NOTE: UNCOMMENT FOR DEBUGGING: SENDS EMAIL IMMEDIATELY
         time.sleep(1500)
 
 
