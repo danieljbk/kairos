@@ -1,10 +1,10 @@
-import smtplib
-import pyowm
-import schedule
-import time
-from email.message import EmailMessage
-from datetime import datetime
 import os
+import time
+import pyowm
+import smtplib
+import schedule
+from datetime import datetime
+from email.message import EmailMessage
 
 
 def weather(location, OPENWEATHERMAP_API_KEY): # collect weather info and generate script to send in email
@@ -62,8 +62,9 @@ def script(name, location, type, OPENWEATHERMAP_API_KEY):
     return script
 
 
-def absolute_path(path):
+def absolute_path(path): # input relative path, output absolute path
     dirname = os.path.dirname(__file__)
+    
     return os.path.join(dirname, path)
 
 
