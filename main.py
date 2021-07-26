@@ -4,6 +4,7 @@ import schedule
 import time
 from email.message import EmailMessage
 from datetime import datetime
+import os
 
 
 def weather(location, OPENWEATHERMAP_API_KEY): # collect weather info and generate script to send in email
@@ -61,16 +62,21 @@ def script(name, location, type, OPENWEATHERMAP_API_KEY):
     return script
 
 
+def absolute_path(path):
+    dirname = os.path.dirname(__file__)
+    return os.path.join(dirname, path)
+
+
 def gather_personal_data(): # from relative path assets/private
-    OPENWEATHERMAP_API_KEY = open("assets/personal/openweathermap_api_key.txt", "r").readline().strip()
-    GMAIL_USERNAME = open("assets/personal/gmail_username.txt", "r").readline().strip()
-    GMAIL_API_KEY = open("assets/personal/gmail_app_password.txt", "r").readline().strip()
+    OPENWEATHERMAP_API_KEY = open(absolute_path("assets/personal/openweathermap_api_key.txt"), "r").readline().strip()
+    GMAIL_USERNAME = open(absolute_path("assets/personal/gmail_username.txt"), "r").readline().strip()
+    GMAIL_API_KEY = open(absolute_path("assets/personal/gmail_app_password.txt"), "r").readline().strip()
     
     return OPENWEATHERMAP_API_KEY, GMAIL_USERNAME, GMAIL_API_KEY
 
 
 def gather_subscriber_data(subscription_type):
-    path = "assets/subscribers"
+    path = absolute_path("assets/subscribers")
     path += "/" + subscription_type
 
     f = open(path, "r")
@@ -166,7 +172,7 @@ def run(): # schedule the email to send every day at a specific time
     while True:
         print("    " + "- checking in:", datetime.now().time())
         schedule.run_pending()
-#         send() # uncomment to send immediately (for testing)
+        send() # uncomment to send immediately (for testing)
         time.sleep(1500)
 
 
