@@ -3,31 +3,19 @@ import time
 import smtplib
 from datetime import datetime
 from email.message import EmailMessage
+from . import auto_import
 
 # auto-import modules that require additional installation
 try:
     import pyowm
 except ImportError:
-    print("Automatically installing the pyowm module...\n")
-    try:
-        os.system('python -m pip install pyowm')
-        print("Successfully installed.")
-    except ImportError:
-        os.system('python -m pip3 install pyowm')
-        print("Successfully installed.\n")
-        
+    auto_import("pyowm")
+    
 try:
     import schedule
 except ImportError:
-    print("Automatically installing the schedule module...\n")
-    try:
-        os.system('python -m pip install schedule')
-        print("Successfully installed.")
-    except ImportError:
-        os.system('python -m pip3 install schedule')
-        print("Successfully installed.\n")
+    auto_import("schedule")
 
-# after installing, actually import the modules
 import pyowm
 import schedule
 
