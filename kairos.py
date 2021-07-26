@@ -3,7 +3,7 @@ import time
 import smtplib
 from datetime import datetime
 from email.message import EmailMessage
-from . import auto_import
+from auto_import import auto_import
 
 # auto-import modules that require additional installation
 try:
