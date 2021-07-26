@@ -17,7 +17,7 @@ Kairos is a script that periodically sends weather information through email or 
 - (To send emails immediately for testing, uncomment the send() line in the run() function in main.py)
 
 ## Prerequisites:
-Additional modules required:
+Additional modules required (these modules will be imported automatically, so don't worry):
 - pyowm
 - schedule
 
