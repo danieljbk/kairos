@@ -6,16 +6,21 @@ from email.message import EmailMessage
 from auto_import import auto_import  # see auto_import.py for details
 exec(auto_import("pyowm"))
 exec(auto_import("schedule"))
+exec(auto_import("uszipcode"))
+from uszipcode import ZipcodeSearchEngine
 
 
 # collect weather info and generate script to send in email
 def weather(location, OPENWEATHERMAP_API_KEY):
+    # location is zip code
+    search = ZipcodeSearchEngine()
     
-
     owm = pyowm.OWM(OPENWEATHERMAP_API_KEY)
     mgr = owm.weather_manager()
     observation = mgr.weather_at_place(location)
-    city, country = observation.city.name, observation.city.country
+    location = search.by_zipcode(location)
+    city, country = location.city, location.state
+    
     w = observation.weather
     
     detailed_status = w.detailed_status
