@@ -11,17 +11,19 @@ exec(auto_import("uszipcode"))
 
 # collect weather info and generate script to send in email
 def weather(location, OPENWEATHERMAP_API_KEY):
-    # location is zip code
     search = uszipcode.SearchEngine()
     
     owm = pyowm.OWM(OPENWEATHERMAP_API_KEY)
     mgr = owm.weather_manager()
     observation = mgr.weather_at_place(location)
-    location = search.by_zipcode(location)
     
-    # needed to use "US" for country because of future code that determines farenheit/celcius
-    city, country = location.city, "US" 
-    #     city, country = location.post_office_city.split(", ")
+    if ", " in location:  # location input was city, country
+        city, country = location.split(", ")
+        state = ""  # No State Data Available
+    else: # location input was zip code
+        location = search.by_zipcode(location)
+        city, country = location.city, "US"  # needed to use "US" for country due to future code determining F˚/C˚
+        state = location.state
     
     w = observation.weather
     
@@ -41,11 +43,11 @@ def weather(location, OPENWEATHERMAP_API_KEY):
                      )  # round and get rid of decimals
     temp, max_temp, min_temp, feels_like = temp_data
 
-    return city, country, detailed_status, w.clouds, w.humidity, temp, max_temp, min_temp, feels_like
+    return city, state, country, detailed_status, w.clouds, w.humidity, temp, max_temp, min_temp, feels_like
 
 
 def script(name, location, type, OPENWEATHERMAP_API_KEY):
-    city, country, status, clouds, humidity, temp, max_temp, min_temp, feels_like = weather(
+    city, state, country, status, clouds, humidity, temp, max_temp, min_temp, feels_like = weather(
         location, OPENWEATHERMAP_API_KEY)
 
     if type == "email":
@@ -63,7 +65,10 @@ def script(name, location, type, OPENWEATHERMAP_API_KEY):
         greeting = "Buenos dias"
         degree_symbol = ' ' + "degrees"
         bot_name = "from Kairos"
-
+    
+    if state: # if location input was zip code, add state name in script
+        city = city + ", " + state
+    
     script += f"{greeting} {name}! {hug_emoji}\n"
     script += "\n"
     script += f"{city} is currently experiencing {status} with {clouds}% cloudiness. {cloud_emoji}\n"
