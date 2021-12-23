@@ -49,25 +49,22 @@ def weather(location, OPENWEATHERMAP_API_KEY):
     elif len(location) == 7:  # location input was city id
         base_url = "http://api.openweathermap.org/data/2.5/weather?"
         city_id = location
-        Final_url = base_url + "appid=" + API_key + "&id=" + city_id
-        data = requests.get(Final_url).json()
-        weather_data = data['weather']
-        print(data)
-        print()
-
-        city, country = data['name'], data['sys']['country']
+        final_url = base_url + "appid=" + API_key + "&id=" + city_id
+        location_data = requests.get(final_url).json()
+        weather_data = location_data['weather']
+        city, country = location_data['name'], location_data['sys']['country']
 
         detailed_status = weather_data[0]['description']
         if detailed_status == 'clear sky' or detailed_status == 'thunderstorm':
             detailed_status = f"a {detailed_status}"
 
-        temp = data['main']['temp']
-        feels_like = data['main']['feels_like']
-        min_temp = data['main']['temp_min']
-        max_temp = data['main']['temp_max']
-        pressure = data['main']['pressure']
-        humidity = data['main']['humidity']
-        clouds = data['clouds']['all']
+        temp = location_data['main']['temp']
+        feels_like = location_data['main']['feels_like']
+        min_temp = location_data['main']['temp_min']
+        max_temp = location_data['main']['temp_max']
+        pressure = location_data['main']['pressure']
+        humidity = location_data['main']['humidity']
+        clouds = location_data['clouds']['all']
 
         # converting weird temp input to normal Celcius
         temp_data = [temp, feels_like, min_temp, max_temp]
@@ -75,7 +72,6 @@ def weather(location, OPENWEATHERMAP_API_KEY):
         if country == 'US':
             # convert to Fahrenheit
             temp_data = list(map(lambda x: x * (9/5) + 32, temp_data))
-
         temp_data = list(map(lambda x: round(x), temp_data))
         temp, feels_like, min_temp, max_temp = temp_data
 
@@ -193,15 +189,16 @@ def send():  # send the email
             search = uszipcode.SearchEngine()
             data[2] = search.by_zipcode(data[2])
             data[2] = data[2].post_office_city  # turn zip code into city, state name
-        elif len(location) == 7:  # location input was city id
+        elif len(data[2]) == 7:  # location input was city id
+            API_key = OPENWEATHERMAP_API_KEY
             base_url = "http://api.openweathermap.org/data/2.5/weather?"
             city_id = data[2]
             final_url = base_url + "appid=" + API_key + "&id=" + city_id
-            data = requests.get(final_url).json()
-            weather_data = data['weather']
-            city, country = data['name'], data['sys']['country']
+            location_data = requests.get(final_url).json()
+            weather_data = location_data['weather']
+            city, country = location_data['name'], location_data['sys']['country']
             data[2] = city + ', ' + country
-           
+            
         print("    " + "- sent to:", data[0], "in", data[2])
 
     for data in sms_subscribers:
@@ -212,13 +209,14 @@ def send():  # send the email
             search = uszipcode.SearchEngine()
             data[2] = search.by_zipcode(data[2])
             data[2] = data[2].post_office_city  # turn zip code into city, state name
-        elif len(location) == 7:  # location input was city id
+        elif len(data[2]) == 7:  # location input was city id
+            API_key = OPENWEATHERMAP_API_KEY
             base_url = "http://api.openweathermap.org/data/2.5/weather?"
             city_id = data[2]
             final_url = base_url + "appid=" + API_key + "&id=" + city_id
-            data = requests.get(final_url).json()
-            weather_data = data['weather']
-            city, country = data['name'], data['sys']['country']
+            location_data = requests.get(final_url).json()
+            weather_data = location_data['weather']
+            city, country = location_data['name'], location_data['sys']['country']
             data[2] = city + ', ' + country
            
         print("    " + "- sent to:", data[0].split("@")[0], "in", data[2])
