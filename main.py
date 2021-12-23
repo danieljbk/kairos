@@ -1,39 +1,104 @@
 import os
 import time
 import smtplib
+import requests
 from datetime import datetime
 from email.message import EmailMessage
-from auto_import import auto_import  # see auto_import.py for details
+
+
+def auto_import(module):
+    try:
+        exec(f"import {module}")  # check if module is installed
+        # if so, module can be imported on the other file
+        return f"import {module}"
+    except ImportError:  # if module is not installed
+        print(f"Automatically installing {module}...\n")
+        try:
+            # try using the pip command (works for some devices)
+            os.system(f'python -m pip install {module}')
+            print(f"Successfully installed {module}.")
+        except ImportError:  # if the python command failed
+            try:
+                # use the pip3 command (works for most devices unless python is not installed)
+                os.system(f'python -m pip3 install {module}')
+                print(f"Successfully installed {module}.\n")
+            except ImportError:
+                print(f"ERROR: Failed to installed {module}.")
+        # return the command to import the module on the other file
+        return f"import {module}"
+
+
 exec(auto_import("pyowm"))
 exec(auto_import("schedule"))
+exec(auto_import("uszipcode"))
 
 
 # collect weather info and generate script to send in email
 def weather(location, OPENWEATHERMAP_API_KEY):
-    city, country = location.split(", ")
+    API_key = OPENWEATHERMAP_API_KEY
 
-    owm = pyowm.OWM(OPENWEATHERMAP_API_KEY)
-    mgr = owm.weather_manager()
-    observation = mgr.weather_at_place(location)
-    w = observation.weather
+    if ", " in location or len(location) == 5:  # if location is name or zip code
+        owm = pyowm.OWM(OPENWEATHERMAP_API_KEY)
+        mgr = owm.weather_manager()
+        observation = mgr.weather_at_place(location)
+        w = observation.weather
 
-    detailed_status = w.detailed_status
-    if detailed_status == 'clear sky' or detailed_status == 'thunderstorm':
-        detailed_status = f"a {detailed_status}"
+        if ", " in location:  # location input was city, country
+            city, country = location.split(", ")
+        else:  # location input was zip code
+            search = uszipcode.SearchEngine()
+            location = search.by_zipcode(location)
+            # needed to use "US" for country due to future code determining F˚/C˚
+            city, country = location.city, "US"
 
-    temp_data = []
-    for x in w.temperature('fahrenheit').items():
-        temp_data.append(x)
-    temp_data = list(
-        map(lambda x: temp_data[temp_data.index(x)][1], temp_data))[:-1]
-    if country != 'US':
-        # convert to Celsius
-        temp_data = list(map(lambda x: (x - 32)/1.8, temp_data))
-    temp_data = list(map(lambda x: int(round(x)), temp_data)
-                     )  # round and get rid of decimals
-    temp, max_temp, min_temp, feels_like = temp_data
+        detailed_status = w.detailed_status
+        if detailed_status == 'clear sky' or detailed_status == 'thunderstorm':
+            detailed_status = f"a {detailed_status}"
 
-    return city, country, detailed_status, w.clouds, w.humidity, temp, max_temp, min_temp, feels_like
+        temp_data = []
+        for x in w.temperature('fahrenheit').items():
+            temp_data.append(x)
+        temp_data = list(
+            map(lambda x: temp_data[temp_data.index(x)][1], temp_data))[:-1]
+        if country != 'US':
+            # convert to Celsius
+            temp_data = list(map(lambda x: (x - 32)/1.8, temp_data))
+        temp_data = list(map(lambda x: int(round(x)), temp_data)
+                         )  # round and get rid of decimals
+        temp, max_temp, min_temp, feels_like = temp_data
+        clouds = w.clouds
+        humidity = w.humidity
+
+    elif len(location) == 7:  # location input was city id
+        base_url = "http://api.openweathermap.org/data/2.5/weather?"
+        city_id = location
+        final_url = base_url + "appid=" + API_key + "&id=" + city_id
+        location_data = requests.get(final_url).json()
+        weather_data = location_data['weather']
+        city, country = location_data['name'], location_data['sys']['country']
+
+        detailed_status = weather_data[0]['description']
+        if detailed_status == 'clear sky' or detailed_status == 'thunderstorm':
+            detailed_status = f"a {detailed_status}"
+
+        temp = location_data['main']['temp']
+        feels_like = location_data['main']['feels_like']
+        min_temp = location_data['main']['temp_min']
+        max_temp = location_data['main']['temp_max']
+        pressure = location_data['main']['pressure']
+        humidity = location_data['main']['humidity']
+        clouds = location_data['clouds']['all']
+
+        # converting weird temp input to normal Celcius
+        temp_data = [temp, feels_like, min_temp, max_temp]
+        temp_data = list(map(lambda x: x - 273, temp_data))
+        if country == 'US':
+            # convert to Fahrenheit
+            temp_data = list(map(lambda x: x * (9/5) + 32, temp_data))
+        temp_data = list(map(lambda x: round(x), temp_data))
+        temp, feels_like, min_temp, max_temp = temp_data
+
+    return city, country, detailed_status, clouds, humidity, temp, max_temp, min_temp, feels_like
 
 
 def script(name, location, type, OPENWEATHERMAP_API_KEY):
@@ -142,52 +207,49 @@ def send():  # send the email
     for data in email_subscribers:
         email_alert(data[0], f"What's the Weather Right Now? ({today()})", script(
             data[1], data[2], "email", OPENWEATHERMAP_API_KEY), GMAIL_USERNAME, GMAIL_API_KEY)
+
+        if len(data[2]) == 5:  # if location input was zip code
+            search = uszipcode.SearchEngine()
+            data[2] = search.by_zipcode(data[2])
+            data[2] = data[2].post_office_city  # turn zip code into city, state name
+        elif len(data[2]) == 7:  # location input was city id
+            API_key = OPENWEATHERMAP_API_KEY
+            base_url = "http://api.openweathermap.org/data/2.5/weather?"
+            city_id = data[2]
+            final_url = base_url + "appid=" + API_key + "&id=" + city_id
+            location_data = requests.get(final_url).json()
+            weather_data = location_data['weather']
+            city, country = location_data['name'], location_data['sys']['country']
+            data[2] = city + ', ' + country
+            
         print("    " + "- sent to:", data[0], "in", data[2])
 
     for data in sms_subscribers:
         email_alert(data[0], f"Weather Update ({today()})", script(
             data[1], data[2], "sms", OPENWEATHERMAP_API_KEY), GMAIL_USERNAME, GMAIL_API_KEY)
+
+        if len(data[2]) == 5:  # if location input was zip code
+            search = uszipcode.SearchEngine()
+            data[2] = search.by_zipcode(data[2])
+            data[2] = data[2].post_office_city  # turn zip code into city, state name
+        elif len(data[2]) == 7:  # location input was city id
+            API_key = OPENWEATHERMAP_API_KEY
+            base_url = "http://api.openweathermap.org/data/2.5/weather?"
+            city_id = data[2]
+            final_url = base_url + "appid=" + API_key + "&id=" + city_id
+            location_data = requests.get(final_url).json()
+            weather_data = location_data['weather']
+            city, country = location_data['name'], location_data['sys']['country']
+            data[2] = city + ', ' + country
+           
         print("    " + "- sent to:", data[0].split("@")[0], "in", data[2])
 
-    print(f"\nSuccess: {today()}\n")
 
-
-def run():  # schedule the email to send every day at a specific time
-    print("When should the email be sent out? (9PM would be 21:00, and 1AM would be 01:00)")
-    hour = input("    Hour: ")
-    minute = input("    Minute: ")
-    print()
-
-    if hour:
-        hour = int(hour)
+def run():
+    now = datetime.now()
+    if now.hour == 9 and now.minute == 0: # only send at 9AM
+    	send()
     else:
-        hour = 0
-
-    if minute:
-        minute = int(minute)
-    else:
-        minute = 0
-
-    am_pm = 'AM'
-    if hour >= 12:
-        am_pm = 'PM'
-
-    designated_time = f"{hour}:{minute}"
-    if hour < 10:
-        hour = f"0{hour}"
-    if minute < 10:
-        minute = f"0{minute}"
-    designated_time = f"{hour}:{minute}"
-
-    print()
-    print(f"Kairos scheduled to send at {int(hour)}:{minute}{am_pm}...")
-    print()
-    schedule.every().day.at(designated_time).do(send)
-    while True:
-        print("    " + "- checking in:", datetime.now().time())
-        schedule.run_pending()
-#         send()  # NOTE: UNCOMMENT FOR DEBUGGING: SENDS EMAIL IMMEDIATELY
-        time.sleep(1500)
-
+        print("Wrong time!")
 
 run()
