@@ -66,8 +66,13 @@ def script(name, location, type, OPENWEATHERMAP_API_KEY):
         degree_symbol = ' ' + "degrees"
         bot_name = "from Kairos"
     
+    '''
+    # visually, adding the state was unpretty.
+    # the state is now unused.
+    
     if state: # if location input was zip code, add state name in script
         city = city + ", " + state
+    '''
     
     script += f"{greeting} {name}! {hug_emoji}\n"
     script += "\n"
