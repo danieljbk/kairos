@@ -25,5 +25,5 @@ def auto_import(module):
                 os.system(f'python -m pip3 install {module}') # use the pip3 command (works for most devices unless python is not installed)
                 print(f"Successfully installed {module}.\n")
             except ImportError:
-                print(f"ERROR: Failed to installed {module}.")
+                print(f"ERROR: Failed to install {module}.")
         return f"import {module}" # return the command to import the module on the other file
