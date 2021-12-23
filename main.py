@@ -1,9 +1,10 @@
 import os
 import time
 import smtplib
+import requests
 from datetime import datetime
 from email.message import EmailMessage
-import requests
+from auto_import import auto_import
 exec(auto_import("pyowm"))
 exec(auto_import("schedule"))
 exec(auto_import("uszipcode"))
