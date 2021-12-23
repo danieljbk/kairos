@@ -63,7 +63,7 @@ def script(name, location, type, OPENWEATHERMAP_API_KEY):
     script += "\n"
     script += f"Carpe diem!\n"
     script += f"{bot_name}\n"
-    script += f"http://daniel.bio/kairos {heart_emoji}"
+    script += f"http://daniel.bio/projects/kairos {heart_emoji}"
 
     return script
 
