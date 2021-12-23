@@ -18,7 +18,7 @@ def weather(location, OPENWEATHERMAP_API_KEY):
     mgr = owm.weather_manager()
     observation = mgr.weather_at_place(location)
     location = search.by_zipcode(location)
-    city, country = location.city, location.state
+    city, country = location.post_office_city.split(", ")
     
     w = observation.weather
     
