@@ -11,16 +11,16 @@ exec(auto_import("uszipcode"))
 
 # collect weather info and generate script to send in email
 def weather(location, OPENWEATHERMAP_API_KEY):
-    search = uszipcode.SearchEngine()
-    
     owm = pyowm.OWM(OPENWEATHERMAP_API_KEY)
     mgr = owm.weather_manager()
     observation = mgr.weather_at_place(location)
+    
     
     if ", " in location:  # location input was city, country
         city, country = location.split(", ")
         state = ""  # No State Data Available
     else: # location input was zip code
+        search = uszipcode.SearchEngine()
         location = search.by_zipcode(location)
         city, country = location.city, "US"  # needed to use "US" for country due to future code determining F˚/C˚
         state = location.state
@@ -155,11 +155,23 @@ def send():  # send the email
     for data in email_subscribers:
         email_alert(data[0], f"What's the Weather Right Now? ({today()})", script(
             data[1], data[2], "email", OPENWEATHERMAP_API_KEY), GMAIL_USERNAME, GMAIL_API_KEY)
+        
+        if ", " not in data[2]:  # if location input was zip code
+            search = uszipcode.SearchEngine()
+            data[2] = search.by_zipcode(data[2])
+            data[2] = data[2].post_office_city  # turn zip code into city, state name
+            
         print("    " + "- sent to:", data[0], "in", data[2])
 
     for data in sms_subscribers:
         email_alert(data[0], f"Weather Update ({today()})", script(
             data[1], data[2], "sms", OPENWEATHERMAP_API_KEY), GMAIL_USERNAME, GMAIL_API_KEY)
+        
+        if ", " not in data[2]:  # if location input was zip code
+            search = uszipcode.SearchEngine()
+            data[2] = search.by_zipcode(data[2])
+            data[2] = data[2].post_office_city  # turn zip code into city, state name
+        
         print("    " + "- sent to:", data[0].split("@")[0], "in", data[2])
 
     print(f"\nSuccess: {today()}\n")
