@@ -10,13 +10,14 @@ exec(auto_import("schedule"))
 
 # collect weather info and generate script to send in email
 def weather(location, OPENWEATHERMAP_API_KEY):
-    city, country = location.split(", ")
+    
 
     owm = pyowm.OWM(OPENWEATHERMAP_API_KEY)
     mgr = owm.weather_manager()
     observation = mgr.weather_at_place(location)
+    city, country = observation.city.name, observation.city.country
     w = observation.weather
-
+    
     detailed_status = w.detailed_status
     if detailed_status == 'clear sky' or detailed_status == 'thunderstorm':
         detailed_status = f"a {detailed_status}"
