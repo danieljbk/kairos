@@ -250,6 +250,8 @@ def run():
     if now.hour == 9 and now.minute == 0: # only send at 9AM
     	send()
     else:
-        print("Wrong time!")
+        if input("Wrong time! Manually Send? (Y/N)\n") == 'Y':
+          send()
+    print()
 
 run()
