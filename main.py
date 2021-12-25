@@ -98,14 +98,16 @@ def script(name, location, type, OPENWEATHERMAP_API_KEY):
         degree_symbol = ' ' + "degrees"
         bot_name = "from Kairos"
 
-    script += f"{greeting} {name}! {hug_emoji}\n"
-    script += "\n"
-    script += f"{city} is currently experiencing {status} with {clouds}% cloudiness. {cloud_emoji}\n"
-    script += f"With {humidity}% humidity, it feels like {feels_like}{degree_symbol} outside. {ok_emoji}\n"
-    script += "\n"
-    script += f"Carpe diem!\n"
-    script += f"{bot_name}\n"
-    script += f"http://daniel.bio/projects/kairos {heart_emoji}"
+    script = f"""
+{greeting} {name}! {hug_emoji}
+
+{city} is currently experiencing {status} with {clouds}% cloudiness. {cloud_emoji}
+With {humidity}% humidity, it feels like {feels_like}{degree_symbol} outside. {ok_emoji}
+
+Carpe diem!
+{bot_name}
+http://daniel.bio/projects/kairos {heart_emoji}
+"""[1:-1]
 
     return script
 
